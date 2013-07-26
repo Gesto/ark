@@ -56,12 +56,21 @@ action :install do
     cwd new_resource.path
     environment new_resource.environment
     notifies :run, "execute[set owner on #{new_resource.path}]"
+    notifies :run, "ruby_block[set mode on #{new_resource.path}]"
     action :nothing
   end
 
   # set_owner
   execute "set owner on #{new_resource.path}" do
     command "/bin/chown -R #{new_resource.owner}:#{new_resource.group} #{new_resource.path}"
+    action :nothing
+  end
+
+  # set the mode on the final dir
+  ruby_block "set owner mode #{new_resource.path}" do
+    block do
+      ::File.chmod(new_resource.mode, new_resource.path)
+    end
     action :nothing
   end
 
