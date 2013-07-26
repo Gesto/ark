@@ -67,7 +67,7 @@ action :install do
   end
 
   # set the mode on the final dir
-  ruby_block "set owner mode #{new_resource.path}" do
+  ruby_block "set mode on #{new_resource.path}" do
     block do
       ::File.chmod(new_resource.mode, new_resource.path)
     end
